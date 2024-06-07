@@ -10,7 +10,7 @@ export default defineEventHandler(async (event) => {
   };
 
   return await $fetch(
-    process.env.API_ROUTE + "/PostComment/" + postId,
+    process.env.API_ROUTE + "/PostComment/post/" + postId,
     options,
   );
 });
