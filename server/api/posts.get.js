@@ -8,5 +8,5 @@ export default defineEventHandler(async () => {
     Headers: headers,
   };
 
-  return await $fetch(process.env.API_ROUTE + "/Post", options);
+  return await $fetch(process.env.API_ROUTE + "/Post?userId=1", options);
 });

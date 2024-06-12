@@ -37,8 +37,10 @@ watch(
   async (newValue, _oldValue) => {
     if (newValue) {
       internalOpen.value = true;
+      document.body.classList.add("w-screen", "overflow-hidden");
     } else {
       await unmountAnimation();
+      document.body.classList.remove("w-screen", "overflow-hidden");
       internalOpen.value = false;
     }
   },
@@ -48,7 +50,7 @@ watch(
 <template>
   <div
     ref="container"
-    class="mount-slide absolute left-0 top-0 z-50 grid h-full w-full grid-rows-[min-content_min-content_1fr_min-content] bg-white py-2 lg:h-96 lg:w-[80%]"
+    class="mount-slide fixed left-0 top-0 z-50 grid h-screen w-full grid-rows-[min-content_min-content_1fr_min-content] overflow-hidden bg-white py-2 lg:h-96 lg:w-[80%]"
     :class="internalOpen ? 'block' : 'hidden'"
   >
     <div class="flex gap-2 border-b py-1">
@@ -66,9 +68,14 @@ watch(
       </div>
     </div>
     <form
+      class="grid grid-rows-[1fr_max-content]"
       v-on:submit.prevent="
         async (e) => {
           await sendPost(e);
+          //await unmountAnimation();
+          //internalOpen = false;
+          $emit('stale');
+          $emit('closePost');
         }
       "
     >

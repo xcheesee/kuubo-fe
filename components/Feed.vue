@@ -14,6 +14,7 @@ const postId = ref(null);
         :post="post.content"
         :likes="post.likes"
         :id="post.id"
+        :comment-count="post.commentCount"
         @open-comment="
           (pId) => {
             openComment = true;

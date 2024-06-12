@@ -5,6 +5,7 @@ const props = defineProps({
 });
 const container = ref(null);
 const internalOpen = ref(false);
+const hasChanged = ref(false);
 
 const comments = ref([]);
 const loading = ref(false);
@@ -26,10 +27,11 @@ async function sendComment(event) {
   const formData = new FormData(event.target);
   formData.append("userId", 1);
   formData.append("postId", props.postId);
-  const res = fetch("/api/comments/" + props.postId, {
+  const res = await fetch("/api/comments/" + props.postId, {
     method: "POST",
     body: formData,
   });
+  hasChanged.value = !hasChanged.value;
 }
 
 const mounted = computed(() => (internalOpen.value ? "block" : "hidden"));
@@ -39,8 +41,10 @@ watch(
   async (newValue, _oldValue) => {
     if (newValue) {
       internalOpen.value = true;
+      document.body.classList.add("w-screen", "overflow-hidden");
     } else {
       await unmountAnimation();
+      document.body.classList.remove("w-screen", "overflow-hidden");
       internalOpen.value = false;
     }
   },
@@ -54,15 +58,24 @@ watch(
     loading.value = false;
   },
 );
+
+watch(hasChanged, async (newValue, _oldValue) => {
+  //if (!newValue) return;
+  loading.value = true;
+  comments.value = await $fetch("/api/comments/" + props.postId);
+  loading.value = false;
+});
 </script>
 
 <template v-if="internalOpen">
   <div
     ref="container"
-    class="mount-slide absolute left-0 top-0 z-50 flex h-full w-full flex-col gap-4 bg-neutral-100 px-4 py-2"
+    class="mount-slide fixed left-0 top-0 z-50 flex min-h-screen w-full flex-col gap-4 overflow-hidden bg-neutral-100"
     :class="mounted"
   >
-    <div class="flex items-end justify-between">
+    <div
+      class="sticky top-0 flex items-end justify-between bg-neutral-100 px-4 py-2"
+    >
       <h2 class="text-3xl font-bold text-neutral-800">Comments</h2>
       <button @click="$emit('closeComment')">
         <Icon name="lucide:chevron-left" size="32" />
@@ -72,7 +85,7 @@ watch(
     <template v-else>
       <div
         v-for="comment in comments"
-        class="grid grid-cols-[max-content_1fr] grid-rows-[max-content_1fr] gap-x-4 rounded bg-white px-4 py-2 shadow"
+        class="mx-4 grid grid-cols-[max-content_1fr] grid-rows-[max-content_1fr] gap-x-4 rounded bg-white px-4 py-2 shadow"
       >
         <div class="row-span-2 h-16 w-16 overflow-hidden rounded-full">
           <img src="/neimapfp.jpg" alt="" class="h-full w-full object-cover" />

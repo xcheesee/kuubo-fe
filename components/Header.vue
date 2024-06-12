@@ -21,7 +21,7 @@ onMounted(() => {
 
 <template>
   <header
-    class="grid w-screen grid-cols-[min-content_1fr_min-content] content-center bg-white"
+    class="sticky top-0 grid w-screen grid-cols-[min-content_1fr_min-content] content-center bg-white shadow"
   >
     <div class="m-2 h-8 w-8 overflow-hidden rounded-xl">
       <img src="/logo.jpg" class="object-fit h-full w-full" />

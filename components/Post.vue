@@ -1,13 +1,32 @@
 <script setup>
 const props = defineProps({
   id: Number,
+  userId: Number,
   user: String,
   date: String,
   post: String,
   likes: Number,
+  liked: {
+    default: false,
+    type: Boolean,
+  },
+  commentCount: Number,
 });
-const liked = ref(false);
-const thumbColor = computed(() => (liked.value ? "#7d7cf9" : "#444"));
+const thumbColor = computed(() => (props.liked ? "#7d7cf9" : "#444"));
+
+async function handleLike() {
+  const postData = {
+    postId: props.id,
+    userId: "1",
+  };
+
+  const options = {
+    method: props.liked ? "DELETE" : "POST",
+    body: postData,
+  };
+
+  return await $fetch("/api/likes", options);
+}
 </script>
 
 <template>
@@ -32,13 +51,20 @@ const thumbColor = computed(() => (liked.value ? "#7d7cf9" : "#444"));
     <div class="item-end mt-2 flex justify-end gap-4 border-t p-2">
       <div class="flex gap-2">
         <span>{{ likes }}</span>
-        <button @click="liked = !liked">
+        <button
+          @click="
+            async () => {
+              await handleLike();
+              $emit('stale');
+            }
+          "
+        >
           <CIcon name="heroicons-solid:thumb-up" :color="thumbColor" />
         </button>
       </div>
 
       <div class="flex items-end gap-2">
-        <span>100</span>
+        <span>{{ commentCount }}</span>
         <button @click="$emit('openComment', id)">
           <CIcon name="heroicons-solid:chat-alt" color="#444" />
         </button>

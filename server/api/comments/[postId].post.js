@@ -1,5 +1,5 @@
 export default defineEventHandler(async (event) => {
-  const body = readFormData(event);
+  const body = await readFormData(event);
 
   const options = {
     method: "POST",

@@ -26,8 +26,8 @@ onMounted(() => {
 
 <template>
   <button
-    class="fixed bottom-0 right-0 mx-4 my-2 h-16 w-16 overflow-hidden rounded-full bg-gradient-to-br from-[#c621e5] to-[#7d7cf9]"
     id="fab-btn"
+    class="mx-4 my-2 h-16 w-16 overflow-hidden rounded-full bg-gradient-to-br from-[#c621e5] to-[#7d7cf9]"
   >
     <CIcon name="lucide:plus" class="h-full w-full px-2 py-2" color="white" />
   </button>
