@@ -3,6 +3,8 @@ const props = defineProps({
   open: Boolean,
   postId: Number,
 });
+
+const emit = defineEmits(["closeComment", "stale"]);
 const container = ref(null);
 const internalOpen = ref(false);
 const hasChanged = ref(false);
@@ -31,6 +33,7 @@ async function sendComment(event) {
     method: "POST",
     body: formData,
   });
+  emit("stale");
   hasChanged.value = !hasChanged.value;
 }
 

@@ -58,6 +58,7 @@ onMounted(async () => {
       <Comments
         :open="openComment"
         @close-comment="openComment = false"
+        @stale="dataStale = !dataStale"
         :postId="postId"
       />
 
